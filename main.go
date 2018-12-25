@@ -1,7 +1,7 @@
 package main
 
-import "./chapter-5"
+import "./chapter-4"
 
 func main() {
-	chapter_5.FunctionSelector()
+	chapter_4.FunctionSelector()
 }

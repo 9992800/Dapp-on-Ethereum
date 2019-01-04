@@ -6,8 +6,6 @@ contract InterTest {
     function shiftNegative() public {
         y = y >> 1;
     }
-
-        function getY() public view returns (int xx){
-            return y;
-        }
+        int8 public z = -2**7;
+        int8 public x = -z;
 }

@@ -1,6 +1,5 @@
-pragma solidity >=0.4.0 <0.6.0;
+pragma solidity 0.5.2;
 
-// file name has to end with '_test.sol'
 contract InterTest {
 
     int  public y = -1024;
@@ -8,7 +7,7 @@ contract InterTest {
         y = y >> 1;
     }
 
-    function getY() public view returns (int xx){
-        return y;
-    }
+        function getY() public view returns (int xx){
+            return y;
+        }
 }

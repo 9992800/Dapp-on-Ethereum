@@ -1,53 +1,87 @@
 import Web3 from "web3";
-import voting_artifacts from '../../build/contracts/LotteryCoin.json'
-
-let candidates = {"李宇春": "candidate-1", "周笔畅": "candidate-2", "张靓颖": "candidate-3"}
+import coin_artifacts from '../../build/contracts/LotteryCoin.json'
+import shop_artifacts from '../../build/contracts/LotteryCoin.json'
 
 const App = {
   web3: null,
   account: null,
-  meta: null,
+  coin: null,
+  shop: null,
 
   init: async function () {
     const {web3} = this;
-
     try {
-      // get contract instance
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = voting_artifacts.networks[networkId];
-      this.meta = new web3.eth.Contract(
-          voting_artifacts.abi,
-          deployedNetwork.address,
+      this.coin = new web3.eth.Contract(
+          coin_artifacts.abi,
+          coin_artifacts.networks[networkId].address,
       );
-      // get accounts
+
       const accounts = await web3.eth.getAccounts();
       this.account = accounts[0];
 
-      this.loadCurrentVoting();
+      this.shop = new web3.eth.Contract(
+          shop_artifacts.abi,
+          shop_artifacts.networks[networkId].address,
+      );
+
+      this.loadBasicInfo();
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
   },
 
-  loadCurrentVoting: async function (){
+  loadBasicInfo :async function (){
+    const {balanceOf, owner, sellPrice, buyPrice} = this.coin.methods;
 
-    let candidateNames = Object.keys(candidates);
-    const { totalVotesFor } = this.meta.methods;
+    const adminAddr = await owner().call()
 
-    for (var i = 0; i < candidateNames.length; i++) {
-      let name = candidateNames[i];
-      const v = await totalVotesFor(this.web3.utils.utf8ToHex(name)).call();
-      $("#" + candidates[name]).html(v.toString());
+    const sell_price = await sellPrice().call()
+    const sell_price_infin = this.web3.utils.fromWei(sell_price, 'finney')
+    const buy_price = await buyPrice().call()
+    const buy_price_infin = this.web3.utils.fromWei(buy_price, 'finney')
+
+    if (this.account == adminAddr){
+      $("#admin-area").show()
+      $("#sell-price").val(sell_price_infin)
+      $("#buy-price").val(buy_price_infin)
+    }else{
+      $("#admin-area").hide()
     }
+    $("#buyTokenNo-msg")[0].innerText = "售价/token:"+sell_price_infin +" finney"
+
+    const accEthEl = $("#account-eth")[0]
+    this.web3.eth.getBalance(this.account).then(
+        (result) =>{
+          const balanceInEth = this.web3.utils.fromWei(result, 'ether')
+          accEthEl.innerText = balanceInEth +" ETH"
+        }
+    )
+
+    const tokenBEl = $("#account-token")[0]
+    const tokenB = await balanceOf(this.account).call()
+    tokenBEl.innerText = (tokenB / 100) + " LTC"
   },
 
-  voteAction: async function (){
-    let name= $("#candidate").val()
-    const { voteForCandidate } = this.meta.methods;
-    await voteForCandidate(this.web3.utils.utf8ToHex(name)).send({ from: this.account });
+  buyTokens: async function (){
+    const { buy, sell } = this.coin.methods;
 
-    this.loadCurrentVoting();
-  }
+    let no = $("#buyTokenSum").val()
+    if (no <= 0){
+      alert("无效的金额")
+      return
+    }
+    console.warn(this.web3.utils.toWei(no, "ether"))
+
+    buy().send({value:this.web3.utils.toWei(no, "ether"), from: this.account
+      }).on('error', function(error){
+        console.error(error)
+      }).on('transactionHash', function(txHash){
+            console.warn("pending",txHash)
+      }).on('confirmation', function(confirmationNumber, receipt){
+          console.warn(confirmationNumber, receipt)
+      });
+  },
 }
 
 window.App = App;
@@ -66,5 +100,4 @@ $(document).ready(function() {
   }
 
   App.init();
-
 });

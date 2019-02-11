@@ -4,7 +4,7 @@ import metaCoinArtifact from "../../../build/contracts/MetaCoin.json";
 const App = {
   web3: null,
   account: null,
-  meta: null,
+  coin: null,
 
   start: async function() {
     const { web3 } = this;
@@ -13,7 +13,7 @@ const App = {
       // get contract instance
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = metaCoinArtifact.networks[networkId];
-      this.meta = new web3.eth.Contract(
+      this.coin = new web3.eth.Contract(
         metaCoinArtifact.abi,
         deployedNetwork.address,
       );

@@ -6,7 +6,7 @@ let candidates = {"李宇春": "candidate-1", "周笔畅": "candidate-2", "张�
 const App = {
   web3: null,
   account: null,
-  meta: null,
+  coin: null,
 
   init: async function () {
     const {web3} = this;
@@ -15,7 +15,7 @@ const App = {
       // get contract instance
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = voting_artifacts.networks[networkId];
-      this.meta = new web3.eth.Contract(
+      this.coin = new web3.eth.Contract(
           voting_artifacts.abi,
           deployedNetwork.address,
       );

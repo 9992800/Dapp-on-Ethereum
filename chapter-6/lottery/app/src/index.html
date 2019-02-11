@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Hello World DApp</title>
+  <title>区块链彩票</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
   <style>
@@ -11,8 +11,8 @@
   </style>
 </head>
 <body class="container">
-<h1>A Simple Hello World Voting Application</h1>
-<div class="col-sm-7 margin-top-3">
+<h1>区块链彩票演示程序</h1>
+<div class="col-sm-5 margin-top-3">
   <h2>Candidates</h2>
   <div class="table-responsive">
     <table class="table table-bordered">
@@ -37,37 +37,48 @@
     <br>
     <a href="#" onclick="voteForCandidate()" class="btn btn-primary">Vote</a>
   </div>
+
+  <div class="container-fluid" id="admin-area">
+    <h2>管理员专区</h2>
+    <input type="text" id="sell-price" placeholder="Sell price"/>finney
+    <br>
+    <br>
+    <input type="text" id="buy-price" placeholder="buy price"/>finney
+    <br>
+    <br>
+    <a href="#" onclick="App.setPrice()" class="btn btn-primary">设置</a>
+  </div>
 </div>
 <div class="col-sm-offset-1 col-sm-4 margin-top-3">
   <div class="row">
-    <h2>Token Stats</h2>
+    <h2>账号信息</h2>
     <div class="table-responsive">
       <table class="table table-bordered">
         <tr>
-          <td>Tokens For Sale</td>
-          <td id="tokens-total"></td>
+          <td>ETH 余额</td>
+          <td id="account-eth"></td>
         </tr>
         <tr>
-          <td>Tokens Sold</td>
-          <td id="tokens-sold"></td>
+          <td>彩票token余额</td>
+          <td id="account-token"></td>
         </tr>
         <tr>
-          <td>Price Per Token</td>
-          <td id="token-cost"></td>
+          <td>本期投注token数</td>
+          <td id="token-inuse"></td>
         </tr>
         <tr>
-          <td>Balance in the contract</td>
-          <td id="contract-balance"></td>
+          <td>本期投注值</td>
+          <td id="bid-no"></td>
         </tr>
       </table>
     </div>
   </div>
   <div class="row margin-top-3">
-    <h2>Purchase Tokens</h2>
+    <h2>购买彩票Token</h2>
     <div class="col-sm-12">
-      <div id="buy-msg"></div>
-      <input type="text" id="buy" class="col-sm-8" placeholder="Number of tokens to buy"/>&nbsp;
-      <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
+      <div id="buyTokenNo-msg"></div>
+      <input type="text" id="buyTokenSum" class="col-sm-8" placeholder="输入支付的eth"/>&nbsp;
+      <a href="#" onclick="App.buyTokens()" class="btn btn-primary">购买</a>
     </div>
   </div>
   <div class="row margin-top-3">

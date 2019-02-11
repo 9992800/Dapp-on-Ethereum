@@ -14,7 +14,10 @@ contract LotteryCoin is owned, TokenERC20 {
     event FrozenFunds(address target, bool frozen);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-    constructor() TokenERC20(1e8, "LotteryCoin", "LTC") public {}
+    constructor() TokenERC20(1e8, "LotteryCoin", "LTC") public {
+        sellPrice = 1 finney;
+        buyPrice  = 1 finney;
+    }
 
     /* Internal transfer, only can be called by this contract */
     function _transfer(address _from, address _to, uint _value) internal {

@@ -3,5 +3,5 @@ const LotteryShop = artifacts.require("LotteryShop");
 
 module.exports = function(deployer) {
   deployer.deploy(LotteryCoin);
-  deployer.deploy(LotteryShop);
+  deployer.deploy(LotteryShop, LotteryCoin.address);
 };

@@ -31,25 +31,21 @@ const App = {
     }
   },
 
-  loadBasicInfo :async function (){
-    const {balanceOf, owner, sellPrice, buyPrice} = this.coin.methods;
-
-    const adminAddr = await owner().call()
+  loadTokenPrice : async function() {
+    const {sellPrice, buyPrice} = this.coin.methods;
 
     const sell_price = await sellPrice().call()
     const sell_price_infin = this.web3.utils.fromWei(sell_price, 'finney')
     const buy_price = await buyPrice().call()
     const buy_price_infin = this.web3.utils.fromWei(buy_price, 'finney')
 
-    if (this.account == adminAddr){
-      $("#admin-area").show()
-      $("#sell-price").val(sell_price_infin)
-      $("#buy-price").val(buy_price_infin)
-    }else{
-      $("#admin-area").hide()
-    }
-    $("#buyTokenNo-msg")[0].innerText = "售价/token:"+sell_price_infin +" finney"
 
+    $("#sell-price").val(sell_price_infin)
+    $("#buy-price").val(buy_price_infin)
+    $("#buyTokenNo-msg")[0].innerText = "售价/token:"+sell_price_infin +" finney"
+  },
+
+  loadEthBalance: async function(){
     const accEthEl = $("#account-eth")[0]
     this.web3.eth.getBalance(this.account).then(
         (result) =>{
@@ -57,10 +53,29 @@ const App = {
           accEthEl.innerText = balanceInEth +" ETH"
         }
     )
+  },
+
+  loadTokenBalance: async function(){
+    const {balanceOf} = this.coin.methods;
 
     const tokenBEl = $("#account-token")[0]
     const tokenB = await balanceOf(this.account).call()
     tokenBEl.innerText = (tokenB / 100) + " LTC"
+  },
+
+  loadBasicInfo :async function (){
+    const {owner} = this.coin.methods;
+
+    const adminAddr = await owner().call()
+    if (this.account == adminAddr){
+      $("#admin-area").show()
+    }else{
+      $("#admin-area").hide()
+    }
+
+    this.loadTokenPrice()
+    this.loadEthBalance()
+    this.loadTokenBalance()
   },
 
   buyTokens: async function (){
@@ -76,12 +91,50 @@ const App = {
     buy().send({value:this.web3.utils.toWei(no, "ether"), from: this.account
       }).on('error', function(error){
         console.error(error)
-      }).on('transactionHash', function(txHash){
-            console.warn("pending",txHash)
-      }).on('confirmation', function(confirmationNumber, receipt){
+      }).on('transactionHash', (txHash) =>{
+            console.warn("transactionHash",txHash)
+
+      }).on('confirmation', (confirmationNumber, receipt) =>{
           console.warn(confirmationNumber, receipt)
-      });
+      }).on('receipt', (receipt) =>{
+        console.warn("receipt", receipt)
+        alert("购买成功")
+        this.loadEthBalance()
+        this.loadTokenBalance()
+    });
   },
+
+  bidThisPhase :async function (){
+
+  },
+
+  setPrice :async function (){
+    var sp = $("#sell-price").val()
+    var bp = $("#buy-price").val()
+
+    if (sp <=0 || bp <= 0){
+      alert("检查参数")
+      return
+    }
+
+    sp = this.web3.utils.toWei(sp, "finney")
+    bp = this.web3.utils.toWei(bp, "finney")
+
+    this.coin.methods.setPrices(sp, bp).send({from:this.account}).on(
+        'transactionHash', (hash) =>{
+            console.warn("hash", hash)
+        }
+    ).on(
+        'confirmation', (confirmationNumber, receipt) =>{
+          console.warn("confirmation", confirmationNumber, receipt)
+        }
+    ).on('receipt', (receipt) =>{
+      console.warn("receipt", receipt)
+      this.loadTokenPrice()
+    })
+  },
+
+
 }
 
 window.App = App;

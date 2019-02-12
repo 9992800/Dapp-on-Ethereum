@@ -27,18 +27,18 @@
     </table>
   </div>
   <div class="container-fluid">
-    <h2>Vote for Candidate</h2>
+    <h2>输入投注序列组合</h2>
     <div id="msg"></div>
-    <input type="text" id="candidate" placeholder="Enter the candidate name"/>
+    <input type="text" id="bidSerial" placeholder="132表示1，3，2组合"/>
     <br>
     <br>
-    <input type="text" id="vote-tokens" placeholder="Total no. of tokens to vote"/>
+    <input type="text" id="bidSum" placeholder="投注token数"/>
     <br>
     <br>
-    <a href="#" onclick="voteForCandidate()" class="btn btn-primary">Vote</a>
+    <a href="#" onclick="App.bidThisPhase()" class="btn btn-primary">投注</a>
   </div>
 
-  <div class="container-fluid" id="admin-area">
+  <div class="container-fluid" id="admin-area" hidden="hidden">
     <h2>管理员专区</h2>
     <input type="text" id="sell-price" placeholder="Sell price"/>finney
     <br>

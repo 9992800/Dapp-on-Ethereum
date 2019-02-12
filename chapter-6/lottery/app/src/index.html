@@ -13,13 +13,13 @@
 <body class="container">
 <h1>区块链彩票演示程序</h1>
 <div class="col-sm-5 margin-top-3">
-  <h2>Candidates</h2>
+  <h2>本期投注信息</h2>
   <div class="table-responsive">
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th>Candidate</th>
-        <th>Votes</th>
+        <th>投注值</th>
+        <th>投注数</th>
       </tr>
       </thead>
       <tbody id="candidate-rows">
@@ -62,14 +62,6 @@
           <td>彩票token余额</td>
           <td id="account-token"></td>
         </tr>
-        <tr>
-          <td>本期投注token数</td>
-          <td id="token-inuse"></td>
-        </tr>
-        <tr>
-          <td>本期投注值</td>
-          <td id="bid-no"></td>
-        </tr>
       </table>
     </div>
   </div>
@@ -82,10 +74,10 @@
     </div>
   </div>
   <div class="row margin-top-3">
-    <h2>Lookup Voter Info</h2>
+    <h2>历史中奖纪录</h2>
     <div class="col-sm-12">
-      <input type="text" id="voter-info", class="col-sm-8" placeholder="Enter the voter address" />&nbsp;
-      <a href="#" onclick="lookupVoterInfo()" class="btn btn-primary">Lookup</a>
+      <input type="text" id="voter-info", class="col-sm-8" placeholder="输入期号" />&nbsp;
+      <a href="#" onclick="App.lookupHistory()" class="btn btn-primary">查询</a>
       <div class="voter-details row text-left">
         <div id="tokens-bought" class="margin-top-3 col-md-12"></div>
         <div id="votes-cast" class="col-md-12"></div>

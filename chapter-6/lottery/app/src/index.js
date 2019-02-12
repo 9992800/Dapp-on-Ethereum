@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import coin_artifacts from '../../build/contracts/LotteryCoin.json'
-import shop_artifacts from '../../build/contracts/LotteryCoin.json'
+import shop_artifacts from '../../build/contracts/LotteryShop.json'
 
 const App = {
   web3: null,
@@ -56,11 +56,20 @@ const App = {
   },
 
   loadTokenBalance: async function(){
-    const {balanceOf} = this.coin.methods;
+    const {balanceOf} = this.coin.methods
 
     const tokenBEl = $("#account-token")[0]
     const tokenB = await balanceOf(this.account).call()
     tokenBEl.innerText = (tokenB / 100) + " LTC"
+  },
+
+  loadCurrentBets:async function(){
+    const {allMyBets} = this.shop.methods
+    allMyBets().call().then(
+        (result)=>{
+          console.warn(result)
+        }
+    )
   },
 
   loadBasicInfo :async function (){
@@ -76,6 +85,7 @@ const App = {
     this.loadTokenPrice()
     this.loadEthBalance()
     this.loadTokenBalance()
+    this.loadCurrentBets()
   },
 
   buyTokens: async function (){
@@ -105,6 +115,36 @@ const App = {
   },
 
   bidThisPhase :async function (){
+    const bidStr = $("#bidSerial").val()
+    if (bidStr.length != 3){
+      alert("请输入3位彩票序列")
+      return
+    }
+
+    const sum = $("#bidSum").val()
+    if (sum <= 0){
+      alert("请输入合适的投注数")
+      return
+    }
+
+    const {bet} = this.shop.methods
+
+    bet(this.web3.utils.utf8ToHex(bidStr), sum).send({from:this.account}).on(
+        'transactionHash', (hash) =>{
+          console.warn("hash", hash)
+        }
+    ).on(
+        'confirmation', (confirmationNumber, receipt) =>{
+          console.warn("confirmation", confirmationNumber, receipt)
+        }
+    ).on('receipt', (receipt) =>{
+      console.warn("receipt", receipt)
+      this.loadTokenBalance()
+      this.loadCurrentBets()
+    })
+  },
+
+  lookupHistory: async function (){
 
   },
 
@@ -133,8 +173,6 @@ const App = {
       this.loadTokenPrice()
     })
   },
-
-
 }
 
 window.App = App;

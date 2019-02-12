@@ -52,7 +52,6 @@ contract LotteryCoin is owned, TokenERC20 {
         _transfer(address(this), msg.sender, amount);
     }
 
-
     function sell(uint256 a) public {
         address myAddress = address(this);
         uint256 amount = a * 10 ** uint256(decimals);

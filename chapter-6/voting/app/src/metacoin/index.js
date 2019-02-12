@@ -13,7 +13,7 @@ const App = {
       // get contract instance
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = metaCoinArtifact.networks[networkId];
-      this.coin = new web3.eth.Contract(
+      this.meta = new web3.eth.Contract(
         metaCoinArtifact.abi,
         deployedNetwork.address,
       );
@@ -28,7 +28,7 @@ const App = {
     }
   },
 
-  loadRandomWords: async function() {
+  refreshBalance: async function() {
     const { getBalance } = this.meta.methods;
     const balance = await getBalance(this.account).call();
 

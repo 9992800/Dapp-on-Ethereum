@@ -44,7 +44,7 @@ contract LotteryShop is owned{
 
         betForUser[msg.sender].push(item);
 
-        // tokenReward.transfer(address(this), sum);
+        tokenReward.transfer(address(this), sum);
 
         emit Bet(msg.sender, betStr, sum);
     }
@@ -92,11 +92,11 @@ contract LotteryShop is owned{
 
         uint fee = tokenReward.balanceOf(address(this)) / 10;
 
-        // tokenReward.transferFrom(address(this), owner, fee);
+        tokenReward.transferFrom(address(this), owner, fee);
 
         uint rewards =  tokenReward.balanceOf(address(this));
 
-        // tokenReward.transferFrom(address(this), currentWinner, fee);
+        tokenReward.transferFrom(address(this), currentWinner, fee);
 
         emit GetWinner(currentWinner, allWinners.length, fee, rewards);
     }

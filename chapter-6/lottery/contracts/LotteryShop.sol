@@ -114,5 +114,6 @@ contract LotteryShop is owned{
             delete betForUser[currentBets[i].bettor];
         }
         delete currentBets;
+        delete currentWinner;
     }
 }

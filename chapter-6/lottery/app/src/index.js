@@ -174,7 +174,19 @@ const App = {
   },
 
   reOpen: async function(){
-
+    const {reOpen} = this.shop.methods;
+    reOpen().send({from: this.account}).on(
+        'transactionHash', (hash) =>{
+          console.warn("hash", hash)
+        }
+    ).on(
+        'confirmation', (confirmationNumber, receipt) =>{
+          console.warn("confirmation", confirmationNumber, receipt)
+        }
+    ).on('receipt', (receipt) =>{
+      console.warn("receipt", receipt)
+      this.loadCurrentBets()
+    })
   },
 
   setPrice :async function (){

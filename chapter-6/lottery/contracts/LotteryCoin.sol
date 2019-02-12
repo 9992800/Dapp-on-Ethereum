@@ -1,6 +1,6 @@
 pragma solidity >=0.4.21 <0.6.0;
 
-import "./Owned.sol";
+    import "./Owned.sol";
 import "./TokenERC20.sol";
 
 contract LotteryCoin is owned, TokenERC20 {

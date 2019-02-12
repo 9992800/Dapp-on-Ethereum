@@ -69,12 +69,16 @@ const App = {
     tBody.empty()
     allMyBets().call({from:this.account}).then(
         (result)=>{
-          console.warn("strs:->",result[0])
-          console.warn("nos:->",(result[1]))
+          console.warn("result:->",result)
           const strs = result[0]
           const nos = result[1]
           for (let i = 0; i < strs.length; i++) {
             tBody.append("<tr><td>" + this.web3.utils.hexToString(strs[i]) + "</td><td>" + nos[i] + "</td></tr>")
+          }
+          if ( result[2] == true){
+            $("#this-phase-msg")[0].innerText = "当前投注已经停止，中奖者地址:" + result[3]
+          }else{
+            $("#this-phase-msg")[0].innerText = ""
           }
         }
     )
@@ -153,7 +157,23 @@ const App = {
     })
   },
 
-  lookupHistory: async function (){
+  findWinner: async function (){
+    const {closeAndFindWinner} = this.shop.methods;
+    closeAndFindWinner().send({from: this.account}).on(
+        'transactionHash', (hash) =>{
+          console.warn("hash", hash)
+        }
+    ).on(
+        'confirmation', (confirmationNumber, receipt) =>{
+          console.warn("confirmation", confirmationNumber, receipt)
+        }
+    ).on('receipt', (receipt) =>{
+      console.warn("receipt", receipt)
+      this.loadCurrentBets()
+    })
+  },
+
+  reOpen: async function(){
 
   },
 

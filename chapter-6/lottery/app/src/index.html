@@ -12,6 +12,7 @@
 </head>
 <body class="container">
 <h1>区块链彩票演示程序</h1>
+<div id="this-phase-msg"></div>
 <div class="col-sm-5 margin-top-3">
   <h2>本期投注信息</h2>
   <div class="table-responsive">
@@ -47,6 +48,13 @@
     <br>
     <br>
     <a href="#" onclick="App.setPrice()" class="btn btn-primary">设置</a>
+    <br>
+    <br>
+    <br>
+    <a href="#" onclick="App.findWinner()" class="btn btn-primary">锁定并摇奖</a>
+    <br>
+    <br>
+    <a href="#" onclick="App.reOpen()" class="btn btn-primary">开始新的一期</a>
   </div>
 </div>
 <div class="col-sm-offset-1 col-sm-4 margin-top-3">
@@ -73,17 +81,18 @@
       <a href="#" onclick="App.buyTokens()" class="btn btn-primary">购买</a>
     </div>
   </div>
-  <div class="row margin-top-3">
-    <h2>历史中奖纪录</h2>
-    <div class="col-sm-12">
-      <input type="text" id="voter-info", class="col-sm-8" placeholder="输入期号" />&nbsp;
-      <a href="#" onclick="App.lookupHistory()" class="btn btn-primary">查询</a>
-      <div class="voter-details row text-left">
-        <div id="tokens-bought" class="margin-top-3 col-md-12"></div>
-        <div id="votes-cast" class="col-md-12"></div>
-      </div>
-    </div>
-  </div>
+
+  <!--<div class="row margin-top-3">-->
+    <!--<h2>历史中奖纪录</h2>-->
+    <!--<div class="col-sm-12">-->
+      <!--<input type="text" id="voter-info", class="col-sm-8" placeholder="输入期号" />&nbsp;-->
+      <!--<a href="#" onclick="App.lookupHistory()" class="btn btn-primary">查询</a>-->
+      <!--<div class="voter-details row text-left">-->
+        <!--<div id="tokens-bought" class="margin-top-3 col-md-12"></div>-->
+        <!--<div id="votes-cast" class="col-md-12"></div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>

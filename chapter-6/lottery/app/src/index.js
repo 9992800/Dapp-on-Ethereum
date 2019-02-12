@@ -65,9 +65,17 @@ const App = {
 
   loadCurrentBets:async function(){
     const {allMyBets} = this.shop.methods
-    allMyBets().call().then(
+    const tBody = $("#bets-rows")
+    tBody.empty()
+    allMyBets().call({from:this.account}).then(
         (result)=>{
-          console.warn(result)
+          console.warn("strs:->",result[0])
+          console.warn("nos:->",(result[1]))
+          const strs = result[0]
+          const nos = result[1]
+          for (let i = 0; i < strs.length; i++) {
+            tBody.append("<tr><td>" + this.web3.utils.hexToString(strs[i]) + "</td><td>" + nos[i] + "</td></tr>")
+          }
         }
     )
   },
@@ -139,6 +147,7 @@ const App = {
         }
     ).on('receipt', (receipt) =>{
       console.warn("receipt", receipt)
+      this.loadEthBalance()
       this.loadTokenBalance()
       this.loadCurrentBets()
     })
@@ -180,7 +189,8 @@ window.App = App;
 $(document).ready(function() {
   if (window.ethereum) {
     App.web3 = new Web3(window.ethereum);
-    window.ethereum.enable(); //
+    window.ethereum.enable();
+    console.warn("用 metamask 的账号")
   } else {
     console.warn(
         "No web3 detected. Falling back to http://127.0.0.1:9545. You should remove this fallback when you deploy live",

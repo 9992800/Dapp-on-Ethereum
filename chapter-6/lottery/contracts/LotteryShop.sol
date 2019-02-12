@@ -40,16 +40,18 @@ contract LotteryShop is owned{
 
         betForUser[msg.sender].push(item);
 
-        tokenReward.transfer(address(this), sum);
+        // tokenReward.transfer(address(this), sum);
 
         emit Bet(msg.sender, betStr, sum);
     }
 
     function allMyBets()public view returns (bytes3[] memory, uint256[] memory){
         BetItem[] memory myBets = betForUser[msg.sender];
+
         uint length = myBets.length;
         bytes3[] memory strs = new bytes3[](length);
         uint256[] memory nos = new uint256[](length);
+
         for(uint i = 0; i <length; i++){
             BetItem memory item = myBets[i];
             strs[i]=(item.betStr);

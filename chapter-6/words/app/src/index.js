@@ -12,7 +12,7 @@ const App = {
     try {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = metaCoinArtifact.networks[networkId];
-      this.coin = new web3.eth.Contract(
+      this.meta = new web3.eth.Contract(
         metaCoinArtifact.abi,
         deployedNetwork.address,
       );

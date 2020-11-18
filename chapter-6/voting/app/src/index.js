@@ -7,6 +7,7 @@ const App = {
   web3: null,
   account: null,
   coin: null,
+  meta:null,
 
   init: async function () {
     const {web3} = this;
@@ -15,7 +16,7 @@ const App = {
       // get contract instance
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = voting_artifacts.networks[networkId];
-      this.coin = new web3.eth.Contract(
+      this.meta = new web3.eth.Contract(
           voting_artifacts.abi,
           deployedNetwork.address,
       );
